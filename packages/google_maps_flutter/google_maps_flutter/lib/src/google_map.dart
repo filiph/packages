@@ -405,14 +405,16 @@ class _GoogleMapState extends State<GoogleMap> {
   @override
   void initState() {
     super.initState();
-    _mapConfiguration = _configurationFromMapWidget(widget);
-    _clusterManagers = keyByClusterManagerId(widget.clusterManagers);
-    _markers = keyByMarkerId(widget.markers);
-    _polygons = keyByPolygonId(widget.polygons);
-    _polylines = keyByPolylineId(widget.polylines);
-    _circles = keyByCircleId(widget.circles);
-    _heatmaps = keyByHeatmapId(widget.heatmaps);
-    _groundOverlays = keyByGroundOverlayId(widget.groundOverlays);
+    Timeline.timeSync('GoogleMaps initState', () {
+      _mapConfiguration = _configurationFromMapWidget(widget);
+      _clusterManagers = keyByClusterManagerId(widget.clusterManagers);
+      _markers = keyByMarkerId(widget.markers);
+      _polygons = keyByPolygonId(widget.polygons);
+      _polylines = keyByPolylineId(widget.polylines);
+      _circles = keyByCircleId(widget.circles);
+      _heatmaps = keyByHeatmapId(widget.heatmaps);
+      _groundOverlays = keyByGroundOverlayId(widget.groundOverlays);
+    });
   }
 
   @override
@@ -428,16 +430,18 @@ class _GoogleMapState extends State<GoogleMap> {
 
   @override
   void didUpdateWidget(GoogleMap oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    _updateOptions();
-    _updateClusterManagers();
-    _updateMarkers();
-    _updatePolygons();
-    _updatePolylines();
-    _updateCircles();
-    _updateHeatmaps();
-    _updateTileOverlays();
-    _updateGroundOverlays();
+    Timeline.timeSync('GoogleMaps didUpdateWidget', () {
+      super.didUpdateWidget(oldWidget);
+      _updateOptions();
+      _updateClusterManagers();
+      _updateMarkers();
+      _updatePolygons();
+      _updatePolylines();
+      _updateCircles();
+      _updateHeatmaps();
+      _updateTileOverlays();
+      _updateGroundOverlays();
+    });
   }
 
   Future<void> _updateOptions() async {
@@ -504,11 +508,14 @@ class _GoogleMapState extends State<GoogleMap> {
   }
 
   Future<void> _updateTileOverlays() async {
+    Timeline.instantSync('GoogleMaps _updateTileOverlays start');
     final GoogleMapController controller = await _controller.future;
     unawaited(controller._updateTileOverlays(widget.tileOverlays));
+    Timeline.instantSync('GoogleMaps _updateTileOverlays end');
   }
 
   Future<void> onPlatformViewCreated(int id) async {
+    Timeline.instantSync('GoogleMaps onPlatformViewCreated start');
     final GoogleMapController controller = await GoogleMapController.init(
       id,
       widget.initialCameraPosition,
@@ -520,6 +527,7 @@ class _GoogleMapState extends State<GoogleMap> {
     if (onMapCreated != null) {
       onMapCreated(controller);
     }
+    Timeline.instantSync('GoogleMaps onPlatformViewCreated end');
   }
 
   void onMarkerTap(MarkerId markerId) {

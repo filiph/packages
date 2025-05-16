@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -125,10 +126,17 @@ class GoogleMapsFlutterAndroid extends GoogleMapsFlutterPlatform {
   }
 
   @override
-  Future<void> init(int mapId) {
-    ensureHandlerInitialized(mapId);
-    final MapsApi hostApi = ensureApiInitialized(mapId);
-    return hostApi.waitForMap();
+  Future<void> init(int mapId) async {
+    Timeline.timeSync('ensureHandlerInitialized', () {
+      ensureHandlerInitialized(mapId);
+    });
+    late final MapsApi hostApi;
+    Timeline.timeSync('ensureApiInitialized', () {
+      hostApi = ensureApiInitialized(mapId);
+    });
+    Timeline.instantSync('before hostApi.waitForMap()');
+    await hostApi.waitForMap();
+    Timeline.instantSync('after hostApi.waitForMap()');
   }
 
   @override
@@ -614,6 +622,7 @@ class GoogleMapsFlutterAndroid extends GoogleMapsFlutterPlatform {
         },
       );
     } else {
+      Timeline.instantSync('before return AndroidView');
       return AndroidView(
         viewType: viewType,
         onPlatformViewCreated: onPlatformViewCreated,
@@ -633,14 +642,19 @@ class GoogleMapsFlutterAndroid extends GoogleMapsFlutterPlatform {
     MapConfiguration mapConfiguration = const MapConfiguration(),
     MapObjects mapObjects = const MapObjects(),
   }) {
-    return _buildView(
-      creationId,
-      onPlatformViewCreated,
-      widgetConfiguration: widgetConfiguration,
-      mapObjects: mapObjects,
-      mapConfiguration:
-          _platformMapConfigurationFromMapConfiguration(mapConfiguration),
-    );
+    late final Widget view;
+    Timeline.timeSync('Android buildViewWithConfiguration', () {
+      view = _buildView(
+        creationId,
+        onPlatformViewCreated,
+        widgetConfiguration: widgetConfiguration,
+        mapObjects: mapObjects,
+        mapConfiguration:
+            _platformMapConfigurationFromMapConfiguration(mapConfiguration),
+      );
+    });
+
+    return view;
   }
 
   @override
