@@ -11,6 +11,8 @@ import androidx.annotation.VisibleForTesting;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapsSdkInitializedCallback;
 import io.flutter.plugin.common.BinaryMessenger;
+import android.util.Log;
+
 
 /** GoogleMaps initializer used to initialize the Google Maps SDK with preferred settings. */
 final class GoogleMapInitializer
@@ -20,15 +22,18 @@ final class GoogleMapInitializer
   private boolean rendererInitialized = false;
 
   GoogleMapInitializer(Context context, BinaryMessenger binaryMessenger) {
+    Log.i("GoogleMapInitializer", "constructor called at: " + System.currentTimeMillis());
     this.context = context;
 
     Messages.MapsInitializerApi.setUp(binaryMessenger, this);
+    Log.i("GoogleMapInitializer", "constructor finished at: " + System.currentTimeMillis());
   }
 
   @Override
   public void initializeWithPreferredRenderer(
       @Nullable Messages.PlatformRendererType type,
       @NonNull Messages.Result<Messages.PlatformRendererType> result) {
+    Log.i("GoogleMapInitializer", "initializeWithPreferredRenderer called at: " + System.currentTimeMillis());
     if (rendererInitialized || initializationResult != null) {
       result.error(
           new Messages.FlutterError(
@@ -49,12 +54,15 @@ final class GoogleMapInitializer
    */
   @VisibleForTesting
   public void initializeWithRendererRequest(@Nullable MapsInitializer.Renderer renderer) {
+    Log.i("GoogleMapInitializer", "initializeWithRendererRequest called at: " + System.currentTimeMillis());
     MapsInitializer.initialize(context, renderer, this);
+    Log.i("GoogleMapInitializer", "initializeWithRendererRequest finished at: " + System.currentTimeMillis());
   }
 
   /** Is called by Google Maps SDK to determine which version of the renderer was initialized. */
   @Override
   public void onMapsSdkInitialized(@NonNull MapsInitializer.Renderer renderer) {
+    Log.i("GoogleMapInitializer", "onMapsSdkInitialized called at: " + System.currentTimeMillis());
     rendererInitialized = true;
     if (initializationResult != null) {
       switch (renderer) {

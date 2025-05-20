@@ -5,6 +5,9 @@
 package io.flutter.plugins.googlemaps;
 
 import static io.flutter.plugins.googlemaps.Convert.clusterToPigeon;
+import java.lang.System;
+import androidx.lifecycle.Lifecycle;
+
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -190,12 +193,20 @@ class GoogleMapController
   }
 
   void init() {
-    lifecycleProvider.getLifecycle().addObserver(this);
+    Log.i(TAG, "init() called " + System.currentTimeMillis());
+    Log.i(TAG, "init() before lifecycleProvider.getLifecycle() " + System.currentTimeMillis());
+    Lifecycle lifecycle = lifecycleProvider.getLifecycle();
+    Log.i(TAG, "init() before lifecycle.addObserver(this) " + System.currentTimeMillis());
+    lifecycle.addObserver(this);
+    Log.i(TAG, "init() before MapView.getMapAsync() " + System.currentTimeMillis());
     mapView.getMapAsync(this);
+    Log.i(TAG, "init() after MapView.getMapAsync() " + System.currentTimeMillis());
+    Log.i(TAG, "init() finished " + System.currentTimeMillis());
   }
 
   @Override
   public void onMapReady(@NonNull GoogleMap googleMap) {
+    Log.i(TAG, "GoogleMapController.onMapReady called " + System.currentTimeMillis());
     this.googleMap = googleMap;
     this.googleMap.setIndoorEnabled(this.indoorEnabled);
     this.googleMap.setTrafficEnabled(this.trafficEnabled);
@@ -239,6 +250,8 @@ class GoogleMapController
       updateMapStyle(initialMapStyle);
       initialMapStyle = null;
     }
+
+    Log.i(TAG, "GoogleMapController.onMapReady ended " + System.currentTimeMillis());
   }
 
   // Returns the first TextureView found in the view hierarchy.

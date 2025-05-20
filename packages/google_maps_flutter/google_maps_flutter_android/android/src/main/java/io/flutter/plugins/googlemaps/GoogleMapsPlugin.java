@@ -17,6 +17,10 @@ import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding;
 import io.flutter.embedding.engine.plugins.lifecycle.FlutterLifecycleAdapter;
+import android.util.Log;
+import java.lang.System;
+
+
 
 /**
  * Plugin for controlling a set of GoogleMap views to be shown as overlays on top of the Flutter
@@ -36,6 +40,8 @@ public class GoogleMapsPlugin implements FlutterPlugin, ActivityAware {
 
   @Override
   public void onAttachedToEngine(@NonNull FlutterPluginBinding binding) {
+    Log.i("GoogleMapsPlugin", "GoogleMapsPlugin onAttachedToEngine called: " + System.currentTimeMillis());
+
     binding
         .getPlatformViewRegistry()
         .registerViewFactory(
@@ -50,6 +56,7 @@ public class GoogleMapsPlugin implements FlutterPlugin, ActivityAware {
                     return lifecycle;
                   }
                 }));
+    Log.i("GoogleMapsPlugin", "GoogleMapsPlugin onAttachedToEngine ending: " + System.currentTimeMillis());
   }
 
   @Override
@@ -59,6 +66,7 @@ public class GoogleMapsPlugin implements FlutterPlugin, ActivityAware {
 
   @Override
   public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
+    Log.i("GoogleMapsPlugin", "GoogleMapsPlugin onAttachedToActivity called: " + System.currentTimeMillis());
     lifecycle = FlutterLifecycleAdapter.getActivityLifecycle(binding);
   }
 
@@ -69,6 +77,7 @@ public class GoogleMapsPlugin implements FlutterPlugin, ActivityAware {
 
   @Override
   public void onReattachedToActivityForConfigChanges(@NonNull ActivityPluginBinding binding) {
+    Log.i("GoogleMapsPlugin", "GoogleMapsPlugin onReattachedToActivityForConfigChanges called: " + System.currentTimeMillis());
     onAttachedToActivity(binding);
   }
 
@@ -90,12 +99,14 @@ public class GoogleMapsPlugin implements FlutterPlugin, ActivityAware {
     private final int registrarActivityHashCode;
 
     ProxyLifecycleProvider(Activity activity) {
+      Log.i("ProxyLifecycleProvider", "ProxyLifecycleProvider constructor called: " + System.currentTimeMillis());
       this.registrarActivityHashCode = activity.hashCode();
       activity.getApplication().registerActivityLifecycleCallbacks(this);
     }
 
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+      Log.i("ProxyLifecycleProvider", "ProxyLifecycleProvider onActivityCreated called: " + System.currentTimeMillis());
       if (activity.hashCode() != registrarActivityHashCode) {
         return;
       }
@@ -104,6 +115,7 @@ public class GoogleMapsPlugin implements FlutterPlugin, ActivityAware {
 
     @Override
     public void onActivityStarted(Activity activity) {
+      Log.i("ProxyLifecycleProvider", "ProxyLifecycleProvider onActivityStarted called: " + System.currentTimeMillis());
       if (activity.hashCode() != registrarActivityHashCode) {
         return;
       }
@@ -149,6 +161,7 @@ public class GoogleMapsPlugin implements FlutterPlugin, ActivityAware {
     @NonNull
     @Override
     public Lifecycle getLifecycle() {
+      Log.i("ProxyLifecycleProvider", "getLifecycle() called: " + System.currentTimeMillis());
       return lifecycle;
     }
   }

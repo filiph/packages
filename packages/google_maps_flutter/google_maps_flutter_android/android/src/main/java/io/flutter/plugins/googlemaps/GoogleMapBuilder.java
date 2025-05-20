@@ -13,6 +13,8 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLngBounds;
 import io.flutter.plugin.common.BinaryMessenger;
 import java.util.List;
+import java.lang.System;
+import android.util.Log;
 
 class GoogleMapBuilder implements GoogleMapOptionsSink {
   private final GoogleMapOptions options = new GoogleMapOptions();
@@ -38,9 +40,13 @@ class GoogleMapBuilder implements GoogleMapOptionsSink {
       Context context,
       BinaryMessenger binaryMessenger,
       LifecycleProvider lifecycleProvider) {
+    Log.i("GoogleMapBuilder", "build called: " + System.currentTimeMillis());
+
     final GoogleMapController controller =
         new GoogleMapController(id, context, binaryMessenger, lifecycleProvider, options);
+    Log.i("GoogleMapBuilder", "build before init: " + System.currentTimeMillis());
     controller.init();
+    Log.i("GoogleMapBuilder", "build after init: " + System.currentTimeMillis());
     controller.setMyLocationEnabled(myLocationEnabled);
     controller.setMyLocationButtonEnabled(myLocationButtonEnabled);
     controller.setIndoorEnabled(indoorEnabled);
@@ -57,6 +63,7 @@ class GoogleMapBuilder implements GoogleMapOptionsSink {
     controller.setInitialTileOverlays(initialTileOverlays);
     controller.setInitialGroundOverlays(initialGroundOverlays);
     controller.setMapStyle(style);
+    Log.i("GoogleMapBuilder", "build before return: " + System.currentTimeMillis());
     return controller;
   }
 
