@@ -201,16 +201,11 @@ class GoogleMapController
     Log.i(TAG, "init() before lifecycleProvider.getLifecycle() " + System.currentTimeMillis());
     Lifecycle lifecycle = lifecycleProvider.getLifecycle();
 
-    new Handler(Looper.getMainLooper()).post(new Runnable() {
-      @Override
-      public void run() {
-        Log.i(TAG, "init() before lifecycle.addObserver(this) " + System.currentTimeMillis());
-        lifecycle.addObserver(GoogleMapController.this);
-        Log.i(TAG, "init() before MapView.getMapAsync() " + System.currentTimeMillis());
-        mapView.getMapAsync(GoogleMapController.this);
-        Log.i(TAG, "init() after MapView.getMapAsync() " + System.currentTimeMillis());
-      }
-    });
+    Log.i(TAG, "init() before lifecycle.addObserver(this) " + System.currentTimeMillis());
+    lifecycle.addObserver(GoogleMapController.this);
+    Log.i(TAG, "init() before MapView.getMapAsync() " + System.currentTimeMillis());
+    mapView.getMapAsync(GoogleMapController.this);
+    Log.i(TAG, "init() after MapView.getMapAsync() " + System.currentTimeMillis());
 
     Log.i(TAG, "init() finished " + System.currentTimeMillis());
   }
