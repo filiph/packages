@@ -475,26 +475,35 @@ class GoogleMapController
 
   @Override
   public void onCreate(@NonNull LifecycleOwner owner) {
+    Log.i(TAG, "onCreate() called " + System.currentTimeMillis());
     if (disposed) {
       return;
     }
+    Log.i(TAG, "just before mapView.onCreate() in onCreate() " + System.currentTimeMillis());
     mapView.onCreate(null);
+    Log.i(TAG, "just after mapView.onCreate() in onCreate() " + System.currentTimeMillis());
   }
 
   @Override
   public void onStart(@NonNull LifecycleOwner owner) {
+    Log.i(TAG, "onStart() called " + System.currentTimeMillis());
     if (disposed) {
       return;
     }
+    Log.i(TAG, "just before mapView.onStart() " + System.currentTimeMillis());
     mapView.onStart();
+    Log.i(TAG, "just after mapView.onStart() " + System.currentTimeMillis());
   }
 
   @Override
   public void onResume(@NonNull LifecycleOwner owner) {
+    Log.i(TAG, "onResume() called " + System.currentTimeMillis());
     if (disposed) {
       return;
     }
+    Log.i(TAG, "just before mapView.onResume() " + System.currentTimeMillis());
     mapView.onResume();
+    Log.i(TAG, "just after mapView.onResume() " + System.currentTimeMillis());
   }
 
   @Override
@@ -524,10 +533,13 @@ class GoogleMapController
 
   @Override
   public void onRestoreInstanceState(Bundle bundle) {
+    Log.i(TAG, "onRestoreInstanceState() called " + System.currentTimeMillis());
     if (disposed) {
       return;
     }
+    Log.i(TAG, "just before mapView.onCreate() in onRestoreInstanceState " + System.currentTimeMillis());
     mapView.onCreate(bundle);
+    Log.i(TAG, "just after mapView.onCreate() in onRestoreInstanceState " + System.currentTimeMillis());
   }
 
   @Override
