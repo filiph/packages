@@ -59,6 +59,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
+import android.os.Handler;
+import android.os.Looper;
+
+
 /** Controller of a single GoogleMaps MapView instance. */
 class GoogleMapController
     implements ActivityPluginBinding.OnSaveInstanceStateListener,
@@ -196,11 +200,18 @@ class GoogleMapController
     Log.i(TAG, "init() called " + System.currentTimeMillis());
     Log.i(TAG, "init() before lifecycleProvider.getLifecycle() " + System.currentTimeMillis());
     Lifecycle lifecycle = lifecycleProvider.getLifecycle();
-    Log.i(TAG, "init() before lifecycle.addObserver(this) " + System.currentTimeMillis());
-    lifecycle.addObserver(this);
-    Log.i(TAG, "init() before MapView.getMapAsync() " + System.currentTimeMillis());
-    mapView.getMapAsync(this);
-    Log.i(TAG, "init() after MapView.getMapAsync() " + System.currentTimeMillis());
+
+    new Handler(Looper.getMainLooper()).post(new Runnable() {
+      @Override
+      public void run() {
+        Log.i(TAG, "init() before lifecycle.addObserver(this) " + System.currentTimeMillis());
+        lifecycle.addObserver(GoogleMapController.this);
+        Log.i(TAG, "init() before MapView.getMapAsync() " + System.currentTimeMillis());
+        mapView.getMapAsync(GoogleMapController.this);
+        Log.i(TAG, "init() after MapView.getMapAsync() " + System.currentTimeMillis());
+      }
+    });
+
     Log.i(TAG, "init() finished " + System.currentTimeMillis());
   }
 
