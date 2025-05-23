@@ -135,7 +135,7 @@ class GoogleMapsFlutterAndroid extends GoogleMapsFlutterPlatform {
       hostApi = ensureApiInitialized(mapId);
     });
     Timeline.instantSync('before hostApi.waitForMap()');
-    await hostApi.waitForMap();
+    unawaited(hostApi.waitForMap());
     Timeline.instantSync('after hostApi.waitForMap()');
   }
 
