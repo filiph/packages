@@ -202,7 +202,7 @@ class GoogleMapController
     Lifecycle lifecycle = lifecycleProvider.getLifecycle();
 
     Log.i(TAG, "init() before lifecycle.addObserver(this) " + System.currentTimeMillis());
-    lifecycle.addObserver(GoogleMapController.this);
+    lifecycle.addObserver(this);
     Log.i(TAG, "init() before MapView.getMapAsync() " + System.currentTimeMillis());
     mapView.getMapAsync(GoogleMapController.this);
     Log.i(TAG, "init() after MapView.getMapAsync() " + System.currentTimeMillis());
